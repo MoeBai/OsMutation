@@ -56,11 +56,11 @@ function install(){
 }
 
 function read_lxc_template(){
-    last_lxc_version=$(curl -Ls "https://api.github.com/repos/LloydAsp/OsMutation/releases/latest" | grep "LXC" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    last_lxc_version=$(curl -Ls "https://api.github.com/repos/MoeBai/OsMutation/releases/latest" | grep "LXC" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
     if [[ -n $last_lxc_version ]]; then
-        image_list=$(curl -Ls "https://api.github.com/repos/LloydAsp/OsMutation/releases/latest" | grep "LXC" | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
+        image_list=$(curl -Ls "https://api.github.com/repos/MoeBai/OsMutation/releases/latest" | grep "LXC" | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
 
-        os_list=$(curl -Ls "https://api.github.com/repos/LloydAsp/OsMutation/releases/latest" | grep "LXC" | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/' | sed "s/https\:\/\/github.com\/LloydAsp\/OsMutation\/releases\/download\/${last_lxc_version}\///g" | sed "s/\.tar\.gz//g")
+        os_list=$(curl -Ls "https://api.github.com/repos/MoeBai/OsMutation/releases/latest" | grep "LXC" | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/' | sed "s/https\:\/\/github.com\/MoeBai\/OsMutation\/releases\/download\/${last_lxc_version}\///g" | sed "s/\.tar\.gz//g")
         echo "$os_list" | nl
 
         while [ -z "${os_index##*[!0-9]*}" ]; do
@@ -265,7 +265,7 @@ function make_temp_os(){
     # prevent no access on ipv6 only vps
     ping -c 3 api.github.com || echo "nameserver 2a00:1098:2c::1"  >  /etc/resolv.conf 
     
-    temp_os_url='https://github.com/LloydAsp/templates/releases/download/v1.0.0/alpine-takeover.tar.gz'
+    temp_os_url='https://github.com/MoeBai/templates/releases/download/v1.0.0/alpine-takeover.tar.gz'
     mkdir -p /x
     mount -t tmpfs tmpfs /x -o size=150M
     if [ -n "$(command -v wget)" ] ; then
@@ -287,7 +287,7 @@ function make_temp_os(){
     cp OsMutationKvm.sh /
 
     cd /x
-    curl -qo takeover.sh https://raw.githubusercontent.com/LloydAsp/OsMutation/main/takeover.sh
+    curl -qo takeover.sh https://raw.githubusercontent.com/MoeBai/OsMutation/main/takeover.sh
     chmod u+x takeover.sh
     ./takeover.sh
     # Note: disk entry "/" has changed now.
