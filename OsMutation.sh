@@ -56,16 +56,16 @@ function install(){
 }
 
 function read_lxc_template(){
-    last_lxc_version=$(curl -Ls "https://api.github.com/repos/LloydAsp/OsMutation/releases/latest" | grep "LXC" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    last_lxc_version=$(curl -Ls "https://api.github.com/repos/MoeBai/OsMutation/releases/latest" | grep "LXC" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
     if [[ -n $last_lxc_version ]]; then
-        image_list=$(curl -Ls "https://api.github.com/repos/LloydAsp/OsMutation/releases/latest" | grep "LXC" | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
+        image_list=$(curl -Ls "https://api.github.com/repos/MoeBai/OsMutation/releases/latest" | grep "LXC" | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
         if [ "$(uname -m)" == "aarch64" ] ; then
             image_list="$(echo "$image_list" | grep arm64)"
         else
             image_list="$(echo "$image_list" | grep -v arm64)"
         fi
 
-        os_list=$(echo "$image_list" | sed "s/https\:\/\/github.com\/LloydAsp\/OsMutation\/releases\/download\/${last_lxc_version}\///g" | sed "s/\.tar\.gz//g")
+        os_list=$(echo "$image_list" | sed "s/https\:\/\/github.com\/MoeBai\/OsMutation\/releases\/download\/${last_lxc_version}\///g" | sed "s/\.tar\.gz//g")
         echo "$os_list" | nl
 
         while [ -z "${os_index##*[!0-9]*}" ]; do
@@ -102,7 +102,7 @@ function read_lxc_template(){
 
 function read_openvz_template(){
     releasetag="v0.0.1"
-    os_list=$(wget -qO- "https://github.com/LloydAsp/OsMutation/releases/expanded_assets/v0.0.1" | \
+    os_list=$(wget -qO- "https://github.com/MoeBai/OsMutation/releases/expanded_assets/v0.0.1" | \
         sed -nE '/tar.gz/s/.*>([^<>]+)\.tar\.gz.*/\1/p' | \
         grep -E "(debian)|(centos)|(alpine)" )
     echo "$os_list" | nl
@@ -114,7 +114,7 @@ function read_openvz_template(){
     done
 
     os_selected=$( echo "$os_list" | head -n $os_index | tail -n 1)
-    download_link="https://github.com/LloydAsp/OsMutation/releases/download/${releasetag}/${os_selected}.tar.gz"
+    download_link="https://github.com/MoeBai/OsMutation/releases/download/${releasetag}/${os_selected}.tar.gz"
 }
 
 function download_rootfs(){
@@ -250,7 +250,7 @@ function main(){
     elif [ "$cttype" == 'lxc' ] ; then
         read_lxc_template
     elif [ "$cttype" == 'kvm' ] ; then
-        curl -qo OsMutationKvm.sh https://raw.githubusercontent.com/LloydAsp/OsMutation/main/OsMutationKvm.sh
+        curl -qo OsMutationKvm.sh https://raw.githubusercontent.com/MoeBai/OsMutation/main/OsMutationKvm.sh
         chmod u+x OsMutationKvm.sh
         ./OsMutationKvm.sh
         exit 0
